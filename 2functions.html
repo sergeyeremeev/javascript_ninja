@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Web app lifecycle</title>
+        <style>
+            #first { color: green; }
+            #second { color: red; }
+        </style>
+    </head>
+    <body>
+        <script>
+            // storing functions only once via adding a property
+            var store = {
+                nextId: 1,
+                cache: {},
+                add: function (fn) {
+                    if (!fn.id) {
+                        fn.id = this.nextId++;
+                        this.cache[fn.id] = fn;
+                        return true;
+                    }
+                }
+            }
+            function ninja() {};
+            function ninja2() {};
+            store.add(ninja);
+            store.add(ninja);
+            store.add(ninja2);
+        </script>
+    </body>
+</html>
