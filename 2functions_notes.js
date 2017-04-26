@@ -30,7 +30,7 @@ var store = {
     }
 };
 
-function ninja() {};
+function ninja() {}
 assert(store.add(ninja), "function was safely added");
 assert(!store.add(ninja), "but it can only be added once");
 
