@@ -91,3 +91,19 @@ assert(sum === 9, "reduce takes in the initial value and calling the callback on
 
 
 // reusing built-in array functions:
+// simulating array-like methods:
+const elems = {
+    length: 0, // array needs a place to store the number of items it's storing. Tricking methods to think it's an array
+    add: function (elem) {
+        Array.prototype.push.call(this, elem); // use array method to add elements to the object
+    },
+    gather: function (id) {
+        this.add(document.getElementById(id)); // use previously implemented add method
+    },
+    find: function (cb) {
+        return Array.prototype.find.call(this, cb); // use array find method to query object properties
+    }
+};
+
+elems.gather('some-element-id');
+elems.find(elem => elem.id === 'some-element-id');
