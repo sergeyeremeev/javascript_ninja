@@ -86,3 +86,32 @@ const pattern = new RegExp("text"); // vs const patter = /test/;
 // backslash followed by the number of capture to be referenced
 /^([dtn])a\1/ // matches a string beginning with either d, t or n, followed by a, followed by whatever that was matched
 // in the first capture
+
+
+// 2 phases of regex - compilation and execution:
+// compilation occurs when regex is first created, execution occurs when we use it to match patterns in a string
+// during compilation the expression is parse by JS engine and converted into internal representation
+// usually browsers will recognize identical regular expressions and cache the compilation results, but it's better to
+// precompile them for later use, as we can't be certain about browser optimizations:
+// <span class="samurai ninja ronin"></span>
+// <span class="samurai ninja"></span>
+// <span class="samurai ronin"></span>
+function findClassElements(className, type) {
+    const elems = document.getElementsByTagName(type || "*");
+    const regex = new RegExp("(^|\\s)" + className + "(\\s|$)"); // store dynamic regex expression in a variable, caching
+                                                                 // it and preventing creating of new regex object each
+                                                                 // time matching happens (some browsers might not optimise)
+    const results = [];
+    for (let i = 0, length = elems.length; i < length; i++) {
+        if (regex.test(elems[i].className)) {
+            results.push(elems[i]);
+        }
+    }
+    return results;
+}
+
+assert(findClassElements("ninja", "div").length === 0, "ninja was not found as a part of any div");
+assert(findClassElements("ninja", "span").length === 0, "ninja was found twice in a span");
+assert(findClassElements("samurai", "span").length === 3, "samurai was found three times");
+
+// the regex was created dynamically each time, so we avoided unnecessary recompilation by caching it in a variable
