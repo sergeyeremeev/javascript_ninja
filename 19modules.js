@@ -21,7 +21,7 @@
 // countClicks is called only in this one place;
 
 // module pattern: augmenting function as modules with objects as interfaces
-const MouseCounterModule = function () {
+let MouseCounterModule = function () {
     let numClicks = 0; // "private" module variable. kept alive via closures created by the interface
     const handleClick = () => { // "private" module function
         alert(++numClicks);
@@ -103,7 +103,7 @@ module.exports = { // modifies module.exports property to specify the public int
 };
 
 // to include it in a different file:
-const MouseCounterModule = require('MouseCounterModule.js');
+MouseCounterModule = require('MouseCounterModule.js');
 MouseCounterModule.countClicks();
 
 // 1 module per file means that any code in the file is part of the module - no need to wrap variables in immediate function
