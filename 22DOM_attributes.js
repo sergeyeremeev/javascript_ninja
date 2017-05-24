@@ -48,4 +48,98 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // style property naming:
+// hyphen prevents property being accessed via dot operator where JS parses would see it as a subtraction operator:
+let fontSize = el.style.font-size;
+// multiword CSS style names are converted to camel case to avoid such problem:
+fontSize = el.style.fontSize; // or el.style['font-size']
 
+// alternative is to write a method for accessing styles:
+function style(el, name, value) {
+    name = name.replace(/-([a-z])/ig, (all, letter) => {
+        return letter.toUpperCase(); // convert to upperCase by replacing hyphen and next letter with uppercased one.
+    });
+    if (typeof value !== 'undefined') { // set the value if one is provided
+        el.style[name] = value;
+    }
+    return el.style[name]; // get property's value
+}
+
+
+// computed styles:
+function fetchComputedStyle(element, property) {
+    const computedStyles = getComputedStyle(element); // obtain a descriptor object
+    if (computedStyles) {
+        property = property.replace(/([A-Z])/g, '-$1').toLowerCase(); // replace camel case with dashes and lowercase letters
+        return computedStyles.getPropertyValue(property); // retrieve the computed style of specific style property
+    }
+}
+
+fetchComputedStyle(document.querySelector('div'), 'background-color');
+
+// when working with amalgam properties, such as border: 1px solid grey; we need to use computed styles to fetch the
+// low-level individual properties.
+
+
+// Heights and Widths:
+// when not specified their values default to auto; offsetHeight and offsetWidth provide a fairly reliable way to access
+// width and height of the element. They include padding of the element!
+// When element is not displayed (display: none;) offsetHeight and offsetWidth return 0. One trick is possible:
+// - change display to block;
+// - set visibility to hidden;
+// - set position to absolute;
+// - grab the dimensions;
+// - restore the changed properties;
+(function () {
+    const PROPERTIES = { // target properties
+        position: 'absolute',
+        visibility: 'hidden',
+        display: 'block'
+    };
+    window.getDimensions = element => {
+        const previous = {}; // remembering initial state
+        for (let key in PROPERTIES) {
+            previous[key] = element.style[key]; // remember settings
+            element.style[key] = PROPERTIES[key];// change to new properties for fetching dimensions
+        }
+        const result = { // fetch dimensions
+            width: element.offsetWidth,
+            height: element.offsetHeight
+        };
+        for (let key in PROPERTIES) { // revert back to initial state
+            element.style[key] = previous[key];
+        }
+        return result; // return dimensions
+    }
+})();
+
+const dimensions = getDimensions(element);
+elWidth = dimensions.width;
+elHeight = dimensions.height;
+
+// getting 0 from offsetWidth and offsetHeight can be a good way to determining the visibility of an element.
+
+
+// Layout thrashing:
+// Performing a series of consecutive reads and writes to DOM, not allowing the browser to perform layout optimizations
+
+// Usually browser tries to delay working with the layout as much as possible to batch as many changes as possible. But
+// sometimes it has to do many recalculations (often needless) which causes layout thrashing.
+
+// Whenever we do a read, the browser has to do a recalculation to provide the most up to date information:
+let ninja = document.getElementById('ninja');
+let ninjaWidth = ninja.clientWidth;
+ninja.style.width = ninjaWidth / 2 + 'px';
+let ronin = document.getElementById('ronin');
+let roninWidth = ronin.clientWidth;
+ronin.style.width = roninWidth / 2 + 'px';
+// by performing consecutive reads and writes we don't allow browser to be lazy and smart;
+
+// instead we could write our code like this:
+ninjaWidth = ninja.clientWidth;
+roninWidth = ronin.clientWidth;
+
+ninja.style.width = ninjaWidth / 2 + 'px';
+ronin.style.width = roninWidth / 2 + 'px';
+// by batching reads and writes we can reduce layout thrashing
+
+// This is where virtual DOM is especially strong!
