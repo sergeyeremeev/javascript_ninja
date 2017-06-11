@@ -2,7 +2,7 @@
 
 // ability to create function anywhere an expression can appear
 
-// example: sorting algorythm:
+// example: sorting algorithm:
 var values = [1, 5, 0, 34, -4, 3];
 values.sort(function (val1, val2) { // callback function passed to sort function
     return val1 - val2; // positive - order reversed, negative - stays the same, 0 - values are equal
@@ -74,10 +74,10 @@ assert(isPrime.answers[5], "the answer was cached!");
 // a parameter is a variable we list as part of function definition (declaration);
 // an argument is a value that we pass to the function when invoking it;
 
-// when a list of arguments is passed during function invokation, arguments are assigned to the parameters of the function
+// when a list of arguments is passed during function invocation, arguments are assigned to the parameters of the function
 // definition in the same order;
 
-// excess arguments are not assigne to parameters, if there are less arguments, undefined will be assigned to parameters
+// excess arguments are not assigned to parameters, if there are less arguments, undefined will be assigned to parameters
 // for which arguments were not provided - no error raised in both cases;
 
 // rest parameters:

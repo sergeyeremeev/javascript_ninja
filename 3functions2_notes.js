@@ -1,8 +1,9 @@
-// functions invocations are passed 2 additional parameters implicitely - arguments and this
+// functions possess 2 additional parameters implicitly - arguments and this
 
 // arguments - collection of arguments passed to a function. We can access all arguments even if matching parameters are
 // not defined. This makes functions overloading possible. However the need for arguments parameter has been reduced with
 // introduction of rest parameters. arguments is an array-like construct.
+
 
 // example - calculate sum of arbitrary number of arguments:
 function sum() {
@@ -26,7 +27,7 @@ function sum(...values) {
 
 
 // this refers to an object which is associated with function's invocation
-// for all, except explicit binding (.call and .apply methods), function invocation operator is a set of paretheses,
+// for all, except explicit binding (.call and .apply methods), function invocation operator is a set of parentheses,
 // following by expression which evaluates to function reference
 
 // Invocations:
@@ -41,7 +42,7 @@ function sum(...values) {
 // * if constructor function returns another object - that object will be returned as the *new* expression, and the newly
 // created object passed as this to the constructor will be discarded; if constructor returns a non-object - the returned
 // value is ignored and the newly created object is returned;
-// - via function call/apply methods -> explicitely specify context and arguments => explicit binding;
+// - via function call/apply methods -> explicitly specify context and arguments => explicit binding;
 
 // simple forEach implementation:
 function forEach(list, callback) {

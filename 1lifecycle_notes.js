@@ -11,7 +11,7 @@
 
 // global code vs function code - global code is executed first, line by line, function code must be called to be executed
 
-// single threaded model - one event at a time -> to track events that have occured but still needs to be processed an
+// single threaded model - one event at a time -> to track events that have occurred but still needs to be processed and
 // event queue is used - browser checks head of the queue - if no events, keep checking - if there is an event take it,
 // execute an associated handler then check again.
 
